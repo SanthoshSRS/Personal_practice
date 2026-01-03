@@ -41,3 +41,82 @@ def upload_even_numbers(data_list):
 # Test data
 my_data = [1, 2, 3, 4, 5, 6]
 print(upload_even_numbers(my_data)) # Should attempt to upload 2, 4, and 6
+
+
+def bulk_upload_inventory(item_list):
+    url = "https://api.example.com/inventory/add"
+    results = {"success": 0, "fail": 0}
+    
+    # Define your headers here
+    headers = {
+        "X-API-KEY": "scret_token_123",
+        "Content-Type": "application/json" # Optional with requests.post(json=...) but good practice
+    }
+    
+    for item in item_list:
+        try:
+            # 1. Send POST request with 'json' and 'headers'
+            # 2. Check if status_code is in the 200 range (Success)
+            # 3. Update results dictionary
+            
+            response = requests.post(url, headers= headers,json=item, timeout=5)
+
+            if response.status_code >= 200 and response.status_code < 300:
+                results["success"] += 1
+            else:
+                results["fail"] += 1
+            
+        except requests.exceptions.RequestException:
+            # If the network fails entirely for one item
+            results["fail"] += 1
+            
+    return results
+
+def test_my_server():
+    url = "http://127.0.0.1:8000/calculate-protein"
+    
+    # 1. Map the raw data to match your Pydantic model
+    raw_data = [
+        {"name": "Chicken", "protein_per_100g": 31, "weight_consumed": 200},
+        {"name": "Eggs", "protein_per_100g": 13, "weight_consumed": 100}
+    ]
+    
+    
+    
+    try:
+        # Make the call
+        response = requests.post(url, json=raw_data)
+        
+        if response.ok:
+            print("Test Passed!")
+            print(f"Total Protein: {response.json()['total_protein_grams']}g")
+        else:
+            print(f"Test Failed with status: {response.status_code}")
+            
+    except requests.exceptions.ConnectionError:
+        print("Error: Is your FastAPI server running?")
+
+
+def test_new_server():
+    url = "http://127.0.0.1:8000/find_smallest_index"
+    
+    # 1. Map the raw data to match your Pydantic model
+    raw_data = {"haystack": "leetcode", "needle": "leeto"}
+    
+    
+    
+    try:
+        # Make the call
+        response = requests.post(url, json=raw_data)
+        
+        if response.ok:
+            print("Test Passed!")
+            print(f"Inital Index: {response.json()['Answer']}")
+        else:
+            print(f"Test Failed with status: {response.status_code}")
+            
+    except requests.exceptions.ConnectionError:
+        print("Error: Is your FastAPI server running?")
+
+if __name__ == "__main__":
+    test_new_server()

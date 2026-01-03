@@ -88,3 +88,56 @@ def calculate_total_inventory_value():
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return 0
+    
+
+
+def get_top_student(subject_name):
+    url = "https://api.example.com/students"
+    
+    try:
+        # 1. Fetch all students
+        # 2. Filter the list to only include the target subject
+        # 3. Track the 'max_score' and 'top_student_name'
+        # 4. Return the name
+        
+        response = requests.get(url, timeout=10, params={"subject" : subject_name})
+        response.raise_for_status()
+        data = response.json()
+        max = -float("inf")
+        name = None
+        for i in data:
+            if i.get("score",-float("inf")) >= max:
+                max = i.get("score",-float("inf"))
+                name = i.get("name", "Noname")
+
+        return name
+
+
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data: {e}")
+        return None
+    
+
+def get_valid_emails():
+    url = "https://api.example.com/users"
+    valid_emails = []
+    
+    try:
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+        users = response.json()
+        
+        # Your task:
+        # 1. Loop through users
+        # 2. Safely check if 'email' exists and is not None
+        # 3. Add to valid_emails list
+        for user in users:
+            if user.get("email", None) !=None:
+                valid_emails.append(user["email"])
+        
+        pass 
+        
+    except Exception as e:
+        return []
+    
