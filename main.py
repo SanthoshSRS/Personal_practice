@@ -35,3 +35,24 @@ def strStr(items: Strin):
         :rtype: int
         """
         return {"Answer": items.haystack.find(items.needle)}
+
+@app.post("/Subsequence")
+def isSubsequence(item: Strin):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        if len(item.haystack) > len(item.needle):
+            return {"Answer": "Not a subsequence"}
+        if not item.haystack:
+            return {"Answer": "Subsequence found!!"}
+        l = 0
+
+        for i in item.needle:
+            if item.haystack[l] == i:
+                l += 1
+                if l == len(item.haystack):
+                    return {"Answer": "Subsequence found!!"}
+        
+        return {"Answer": "Not a subsequence"}

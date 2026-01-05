@@ -118,5 +118,27 @@ def test_new_server():
     except requests.exceptions.ConnectionError:
         print("Error: Is your FastAPI server running?")
 
+
+def test_newsub_server():
+    url = "http://127.0.0.1:8000/Subsequence"
+    
+    # 1. Map the raw data to match your Pydantic model
+    raw_data = {"haystack": "axc", "needle": "ahbgdc"}
+    
+    
+    
+    try:
+        # Make the call
+        response = requests.post(url, json=raw_data)
+        
+        if response.ok:
+            print("Test Passed!")
+            print(f"{response.json()['Answer']}")
+        else:
+            print(f"Test Failed with status: {response.status_code}")
+            
+    except requests.exceptions.ConnectionError:
+        print("Error: Is your FastAPI server running?")
+
 if __name__ == "__main__":
-    test_new_server()
+    test_newsub_server()
