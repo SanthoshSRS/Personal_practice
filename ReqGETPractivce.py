@@ -141,3 +141,42 @@ def get_valid_emails():
     except Exception as e:
         return []
     
+def get_average_weight(type_name, limit=5):
+    type_url = f"https://pokeapi.co/api/v2/type/{type_name}"
+    weights = []
+    
+    try:
+        # 1. Fetch the type data
+        response = requests.get(type_url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        # 2. Get the list of pokemon (it's under 'pokemon' key)
+        pokemon_list = data.get("pokemon", [])[:limit]
+        
+        for entry in pokemon_list:
+            # 3. Get the URL for this specific pokemon
+            poke_url = entry["pokemon"]["url"]
+            
+            # 4. Make a request to that URL
+            supres = requests.get(poke_url, timeout=5,)
+            supres.raise_for_status()
+            temp = supres.json()
+            
+            # 5. Extract the 'weight' and add to weights list
+            kg = temp["weight"]
+            weights.append(kg/10)
+             # Your logic here
+            
+        # 6. Calculate average
+        print(weights)
+        if not weights:
+            return 0
+        return sum(weights) / len(weights)
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return 0
+
+# Test it:
+print(f"Average weight of fire pokemon: {get_average_weight('fire')}kg")
